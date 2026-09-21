@@ -1,0 +1,5 @@
+package com.cinepass.movie.exception;
+
+public class ErrorResponse {
+
+}

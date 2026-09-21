@@ -1,0 +1,5 @@
+package com.cinepass.user.entity;
+
+public class user {
+
+}

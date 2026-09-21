@@ -1,0 +1,5 @@
+package com.cinepass.movie.controller;
+
+public class MovieController {
+
+}

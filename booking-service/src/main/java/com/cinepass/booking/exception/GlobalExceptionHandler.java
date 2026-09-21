@@ -1,0 +1,25 @@
+package com.cinepass.booking.exception;
+
+import java.time.Instant;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> notFound(ResourceNotFoundException ex) {
+        return Map.of("timestamp", Instant.now(), "status", 404, "error", ex.getMessage());
+    }
+
+    @ExceptionHandler({SeatUnavailableException.class, InvalidBookingStateException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> conflict(RuntimeException ex) {
+        return Map.of("timestamp", Instant.now(), "status", 409, "error", ex.getMessage());
+    }
+}
