@@ -1,5 +1,0 @@
-package com.cinepass.movie.dto;
-
-public class MovieRequest {
-
-}

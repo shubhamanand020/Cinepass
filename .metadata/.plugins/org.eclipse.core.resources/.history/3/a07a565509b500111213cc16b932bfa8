@@ -1,5 +1,0 @@
-package com.cinepass.movie.repository;
-
-public interface MovieRepository {
-
-}
