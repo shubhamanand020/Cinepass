@@ -82,16 +82,20 @@ public class UserServiceImpl implements UserService {
                                 "User not found with id: " + id
                         ));
 
-        if (!user.getEmail().equals(request.getEmail())
-                && userRepository.existsByEmail(request.getEmail())) {
-
-            throw new DuplicateEmailException(
-                    "User with this email already exists"
-            );
+        if (request.getName() != null && !request.getName().isBlank()) {
+            user.setName(request.getName());
         }
 
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            if (!user.getEmail().equalsIgnoreCase(request.getEmail())
+                    && userRepository.existsByEmail(request.getEmail())) {
+
+                throw new DuplicateEmailException(
+                        "User with this email already exists"
+                );
+            }
+            user.setEmail(request.getEmail());
+        }
 
         User updatedUser = userRepository.save(user);
 
