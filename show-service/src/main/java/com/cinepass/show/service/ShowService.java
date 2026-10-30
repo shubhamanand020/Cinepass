@@ -62,6 +62,22 @@ public class ShowService {
         })).sorted(Comparator.comparing(SeatResponse::row).thenComparing(SeatResponse::column)).toList();
     }
 
+    public ShowResponse update(Long id, CreateShowRequest request) {
+        Show show = getEntity(id);
+        screenService.getEntity(request.getScreenId());
+        show.setMovieId(request.getMovieId());
+        show.setScreenId(request.getScreenId());
+        show.setShowTime(request.getShowTime());
+        show.setBasePrice(request.getBasePrice());
+        show.setPremiumPrice(request.getPremiumPrice());
+        return toResponse(repository.save(show));
+    }
+
+    public void delete(Long id) {
+        Show show = getEntity(id);
+        repository.delete(show);
+    }
+
     private ShowResponse toResponse(Show s) {
         return new ShowResponse(s.getId(), s.getMovieId(), s.getScreenId(), s.getShowTime(), s.getBasePrice(), s.getPremiumPrice());
     }

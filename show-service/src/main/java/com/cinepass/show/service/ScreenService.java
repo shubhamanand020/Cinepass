@@ -41,6 +41,21 @@ public class ScreenService {
         return toResponse(getEntity(id));
     }
 
+    public ScreenResponse update(Long id, CreateScreenRequest request) {
+        Screen screen = getEntity(id);
+        screen.setName(request.getName());
+        screen.setTheatreName(request.getTheatreName());
+        screen.setRows(request.getRows());
+        screen.setSeatsPerRow(request.getSeatsPerRow());
+        screen.setPremiumRows(request.getPremiumRows());
+        return toResponse(repository.save(screen));
+    }
+
+    public void delete(Long id) {
+        Screen screen = getEntity(id);
+        repository.delete(screen);
+    }
+
     private ScreenResponse toResponse(Screen s) {
         return new ScreenResponse(s.getId(), s.getName(), s.getTheatreName(), s.getRows(), s.getSeatsPerRow(), s.getPremiumRows());
     }

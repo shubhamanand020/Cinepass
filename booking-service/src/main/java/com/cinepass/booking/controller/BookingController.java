@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,11 @@ public class BookingController {
 
     @PostMapping("/{id}/cancel")
     public BookingResponse cancel(Authentication auth, @PathVariable Long id) {
+        return service.cancel(userId(auth), id);
+    }
+
+    @DeleteMapping("/{id}")
+    public BookingResponse delete(Authentication auth, @PathVariable Long id) {
         return service.cancel(userId(auth), id);
     }
 

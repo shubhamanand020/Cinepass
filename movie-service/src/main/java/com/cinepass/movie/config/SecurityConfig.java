@@ -30,12 +30,22 @@ public class SecurityConfig {
                 .sessionManagement(s ->
                         s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers(HttpMethod.GET, "/api/movies/**", "/actuator/**")
+                        .requestMatchers(HttpMethod.GET, "/api/movies", "/api/movies/**", "/actuator/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                .oauth2ResourceServer(o ->
-                        o.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(o -> o
+                        .jwt(Customizer.withDefaults())
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"" + authException.getMessage().replace("\"", "\\\"") + "\"}");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN);
+                            response.getWriter().write("{\"status\":403,\"error\":\"Forbidden\",\"message\":\"" + accessDeniedException.getMessage().replace("\"", "\\\"") + "\"}");
+                        }))
                 .build();
     }
 }
