@@ -36,7 +36,3 @@ The gateway routes users/auth to user-service, movies to movie-service, screens 
 ## Technology
 Java 21, Spring Boot 4.0.8, Spring Cloud, Spring Web MVC, Spring Data JPA, PostgreSQL 18, Eureka, OpenFeign, Spring Security JWT resource-server support, BCrypt, Maven, and React as the planned frontend.
 
-## Review 1 scope and status
-Implemented for Review 1: service boundaries, unique ports, Eureka configuration, gateway routes, PostgreSQL configuration, JWT login/validation, canonical movie ownership, show scheduling, seat map generation, authenticated booking ownership, hold/confirm/cancel flow, and documentation.
-
-Runtime integration verification remains dependent on local PostgreSQL databases and a running Eureka server. The repository build verifies compilation; live registration, database CRUD, login requests, and gateway routing require those external processes to be started.
