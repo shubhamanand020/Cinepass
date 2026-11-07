@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Role role = Role.ROLE_USER;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -39,6 +43,14 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = Role.ROLE_USER;
+    }
+
+    public User(String name, String email, String password, Role role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role != null ? role : Role.ROLE_USER;
     }
 
     @PrePersist
@@ -75,6 +87,14 @@ public class User {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role != null ? role : Role.ROLE_USER;
     }
 
     public void setId(Long id) {

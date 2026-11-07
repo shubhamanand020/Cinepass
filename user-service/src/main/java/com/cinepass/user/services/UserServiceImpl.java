@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        user.setRole(com.cinepass.user.entity.Role.ROLE_USER);
 
         String encodedPassword =
                 passwordEncoder.encode(request.getPassword());
@@ -120,6 +121,7 @@ public class UserServiceImpl implements UserService {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getRole() != null ? user.getRole().name() : "ROLE_USER",
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );

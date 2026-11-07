@@ -26,6 +26,6 @@ public class AuthController {
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
-        return new AuthResponse(jwtService.createToken(user), user.getId(), user.getEmail());
+        return new AuthResponse(jwtService.createToken(user), user.getId(), user.getEmail(), user.getRole().name());
     }
 }

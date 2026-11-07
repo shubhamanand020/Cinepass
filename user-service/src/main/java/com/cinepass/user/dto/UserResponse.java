@@ -7,6 +7,7 @@ public class UserResponse {
     private Long id;
     private String name;
     private String email;
+    private String role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -17,14 +18,26 @@ public class UserResponse {
             Long id,
             String name,
             String email,
+            String role,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public UserResponse(
+            Long id,
+            String name,
+            String email,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
+        this(id, name, email, "ROLE_USER", createdAt, updatedAt);
     }
 
     public Long getId() {
@@ -45,6 +58,14 @@ public class UserResponse {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setEmail(String email) {
