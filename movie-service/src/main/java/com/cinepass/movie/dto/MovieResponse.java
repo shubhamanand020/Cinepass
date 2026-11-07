@@ -10,6 +10,7 @@ public class MovieResponse {
     private Integer duration;
     private String releaseDate;
     private String posterUrl;
+    private String trailerUrl;
 
     public MovieResponse() {
     }
@@ -25,6 +26,20 @@ public class MovieResponse {
         this.duration = duration;
         this.releaseDate = releaseDate;
         this.posterUrl = posterUrl;
+    }
+
+    public MovieResponse(Long id, String title, String description,
+                         String genre, String language, Integer duration,
+                         String releaseDate, String posterUrl, String trailerUrl) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.genre = genre;
+        this.language = language;
+        this.duration = duration;
+        this.releaseDate = releaseDate;
+        this.posterUrl = posterUrl;
+        this.trailerUrl = trailerUrl;
     }
 
     public Long getId() {
@@ -89,5 +104,13 @@ public class MovieResponse {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 }

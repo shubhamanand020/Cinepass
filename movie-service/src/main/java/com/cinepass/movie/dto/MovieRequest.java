@@ -9,6 +9,7 @@ public class MovieRequest {
     private Integer duration;
     private String releaseDate;
     private String posterUrl;
+    private String trailerUrl;
 
     public MovieRequest() {
     }
@@ -67,5 +68,13 @@ public class MovieRequest {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 }

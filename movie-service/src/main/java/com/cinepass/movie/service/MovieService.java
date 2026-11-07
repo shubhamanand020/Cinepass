@@ -28,6 +28,7 @@ public class MovieService {
         movie.setDuration(request.getDuration());
         movie.setReleaseDate(request.getReleaseDate());
         movie.setPosterUrl(request.getPosterUrl());
+        movie.setTrailerUrl(request.getTrailerUrl());
 
         Movie savedMovie = movieRepository.save(movie);
 
@@ -66,6 +67,7 @@ public class MovieService {
         movie.setDuration(request.getDuration());
         movie.setReleaseDate(request.getReleaseDate());
         movie.setPosterUrl(request.getPosterUrl());
+        movie.setTrailerUrl(request.getTrailerUrl());
 
         Movie updatedMovie = movieRepository.save(movie);
 
@@ -91,7 +93,8 @@ public class MovieService {
                 movie.getLanguage(),
                 movie.getDuration(),
                 movie.getReleaseDate(),
-                movie.getPosterUrl()
+                movie.getPosterUrl(),
+                movie.getTrailerUrl()
         );
     }
 }

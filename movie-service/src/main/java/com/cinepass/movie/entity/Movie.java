@@ -26,6 +26,9 @@ public class Movie {
 
     private String posterUrl;
 
+    @Column(name = "trailer_url")
+    private String trailerUrl;
+
     public Movie() {
     }
 
@@ -40,6 +43,20 @@ public class Movie {
         this.duration = duration;
         this.releaseDate = releaseDate;
         this.posterUrl = posterUrl;
+    }
+
+    public Movie(Long id, String title, String description, String genre,
+                 String language, Integer duration, String releaseDate,
+                 String posterUrl, String trailerUrl) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.genre = genre;
+        this.language = language;
+        this.duration = duration;
+        this.releaseDate = releaseDate;
+        this.posterUrl = posterUrl;
+        this.trailerUrl = trailerUrl;
     }
 
     public Long getId() {
@@ -104,5 +121,13 @@ public class Movie {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 }

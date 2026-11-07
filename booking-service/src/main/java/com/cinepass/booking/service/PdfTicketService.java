@@ -105,11 +105,11 @@ public class PdfTicketService {
 
             // Cinema & Screen
             addMetaItem(metaGrid, "THEATRE / HALL", screen != null ? screen.theatreName() : "Main Multiplex", labelFont, valueFont);
-            addMetaItem(metaGrid, "SCREEN", screen != null ? screen.name() : ("Screen #" + show.screenId()), labelFont, valueFont);
+            addMetaItem(metaGrid, "SCREEN", screen != null ? screen.name() : (show != null ? ("Screen #" + show.screenId()) : "Screen #1"), labelFont, valueFont);
 
             // Showtime & Date
-            String showDateFormatted = show.showTime() != null ? show.showTime().format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")) : "N/A";
-            String showTimeFormatted = show.showTime() != null ? show.showTime().format(DateTimeFormatter.ofPattern("hh:mm a")) : "N/A";
+            String showDateFormatted = (show != null && show.showTime() != null) ? show.showTime().format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")) : "N/A";
+            String showTimeFormatted = (show != null && show.showTime() != null) ? show.showTime().format(DateTimeFormatter.ofPattern("hh:mm a")) : "N/A";
             addMetaItem(metaGrid, "DATE", showDateFormatted, labelFont, valueFont);
             addMetaItem(metaGrid, "TIME", showTimeFormatted, labelFont, valueFont);
 
