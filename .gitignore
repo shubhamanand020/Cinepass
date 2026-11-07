@@ -43,5 +43,9 @@ seed-data.sql
 init-databases.sql
 reset-databases.sql
 reset-and-seed.ps1
+*.dump
+*.bak
+backups/
+
 
 

@@ -14,4 +14,3 @@ public record MovieDto(
         String posterUrl,
         String trailerUrl
 ) {}
-
