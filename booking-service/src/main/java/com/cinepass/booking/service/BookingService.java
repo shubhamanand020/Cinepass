@@ -122,6 +122,24 @@ public class BookingService {
     }
 
     @Transactional(readOnly = true)
+    public List<BookingResponse> allBookings() {
+        return bookingRepository.findAll().stream().map(this::response).toList();
+    }
+
+    @Transactional
+    public BookingResponse adminCancel(Long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
+        if (booking.getStatus() == BookingStatus.CANCELLED) {
+            throw new InvalidBookingStateException("Booking is already cancelled");
+        }
+        allocationRepository.deleteByBookingId(id);
+        booking.setStatus(BookingStatus.CANCELLED);
+        booking.setCancelledAt(LocalDateTime.now());
+        return response(bookingRepository.save(booking));
+    }
+
+    @Transactional(readOnly = true)
     public List<SeatAvailabilityResponse> availability(Long showId) {
         Map<String, SeatAllocation> allocated = allocationRepository.findByShowId(showId).stream().collect(Collectors.toMap(SeatAllocation::getSeatNumber, a -> a));
         return showClient.getSeatMap(showId).stream().map(s -> new SeatAvailabilityResponse(s.seatNumber(), s.seatType(), s.price(), allocated.containsKey(s.seatNumber()) ? allocated.get(s.seatNumber()).getStatus().name() : "AVAILABLE")).toList();

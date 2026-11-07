@@ -60,6 +60,16 @@ public class BookingController {
         return service.byUser(userId(auth));
     }
 
+    @GetMapping("/admin/all")
+    public List<BookingResponse> allBookings() {
+        return service.allBookings();
+    }
+
+    @PostMapping("/admin/{id}/cancel")
+    public BookingResponse adminCancel(@PathVariable Long id) {
+        return service.adminCancel(id);
+    }
+
     private Long userId(Authentication auth) {
         return Long.valueOf(auth.getName());
     }

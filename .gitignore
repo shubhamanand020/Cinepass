@@ -38,7 +38,10 @@ build/
 *.ps1
 *.ps
 *seed*.sql
+*reset*.sql
 seed-data.sql
 init-databases.sql
+reset-databases.sql
+reset-and-seed.ps1
 
 
