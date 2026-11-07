@@ -4,8 +4,10 @@ import com.cinepass.booking.entity.*;
 import org.springframework.data.jpa.repository.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByUserId(Long userId);
     List<Booking> findByStatusAndHoldExpiresAtBefore(BookingStatus status, LocalDateTime time);
+    Optional<Booking> findByTicketToken(String ticketToken);
 }

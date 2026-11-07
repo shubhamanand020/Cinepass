@@ -9,4 +9,5 @@ import java.util.List;
 public interface ShowServiceClient {
     @GetMapping("/api/shows/{id}") ShowDto getShow(@PathVariable("id") Long id);
     @GetMapping("/api/shows/{id}/seats") List<SeatDto> getSeatMap(@PathVariable("id") Long id);
+    @GetMapping("/api/screens/{id}") ScreenDto getScreen(@PathVariable("id") Long id);
 }

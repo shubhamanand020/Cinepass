@@ -1,6 +1,8 @@
 package com.cinepass.user.services;
 
+import com.cinepass.user.dto.ChangePasswordRequest;
 import com.cinepass.user.dto.CreateUserRequest;
+import com.cinepass.user.dto.UpdateProfileRequest;
 import com.cinepass.user.dto.UpdateUserRequest;
 import com.cinepass.user.dto.UserResponse;
 import com.cinepass.user.entity.User;
@@ -63,6 +65,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User not found with email: " + email
+                        ));
+        return mapToResponse(user);
+    }
+
+    @Override
     public List<UserResponse> getAllUsers() {
 
         return userRepository.findAll()
@@ -115,12 +127,49 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public UserResponse getProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        return mapToResponse(user);
+    }
+
+    @Override
+    public UserResponse updateProfile(Long userId, UpdateProfileRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        if (request.getName() != null && !request.getName().isBlank()) {
+            user.setName(request.getName().trim());
+        }
+        if (request.getPhone() != null) {
+            user.setPhone(request.getPhone().trim());
+        }
+
+        User updated = userRepository.save(user);
+        return mapToResponse(updated);
+    }
+
+    @Override
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
     private UserResponse mapToResponse(User user) {
 
         return new UserResponse(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getPhone(),
                 user.getRole() != null ? user.getRole().name() : "ROLE_USER",
                 user.getCreatedAt(),
                 user.getUpdatedAt()

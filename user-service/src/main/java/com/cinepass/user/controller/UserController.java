@@ -1,12 +1,15 @@
 package com.cinepass.user.controller;
 
+import com.cinepass.user.dto.ChangePasswordRequest;
 import com.cinepass.user.dto.CreateUserRequest;
+import com.cinepass.user.dto.UpdateProfileRequest;
 import com.cinepass.user.dto.UpdateUserRequest;
 import com.cinepass.user.dto.UserResponse;
 import com.cinepass.user.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +34,31 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> getProfile(Authentication auth) {
+        Long userId = extractUserId(auth);
+        return ResponseEntity.ok(userService.getProfile(userId));
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<UserResponse> updateProfile(
+            Authentication auth,
+            @Valid @RequestBody UpdateProfileRequest request
+    ) {
+        Long userId = extractUserId(auth);
+        return ResponseEntity.ok(userService.updateProfile(userId, request));
+    }
+
+    @PutMapping("/profile/change-password")
+    public ResponseEntity<Void> changePassword(
+            Authentication auth,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        Long userId = extractUserId(auth);
+        userService.changePassword(userId, request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
@@ -70,5 +98,14 @@ public class UserController {
         userService.deleteUser(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    private Long extractUserId(Authentication auth) {
+        String principal = auth.getName();
+        try {
+            return Long.valueOf(principal);
+        } catch (NumberFormatException e) {
+            return userService.getUserByEmail(principal).getId();
+        }
     }
 }

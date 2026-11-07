@@ -26,6 +26,9 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Column(length = 20)
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role = Role.ROLE_USER;
@@ -79,6 +82,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -49,6 +49,12 @@ public class Booking {
     private LocalDateTime confirmedAt;
     private LocalDateTime cancelledAt;
 
+    @Column(name = "ticket_token", length = 64, unique = true)
+    private String ticketToken;
+
+    @Column(name = "checked_in_at")
+    private LocalDateTime checkedInAt;
+
     public Booking() {
     }
 
@@ -130,5 +136,21 @@ public class Booking {
 
     public void setCancelledAt(LocalDateTime cancelledAt) {
         this.cancelledAt = cancelledAt;
+    }
+
+    public String getTicketToken() {
+        return ticketToken;
+    }
+
+    public void setTicketToken(String ticketToken) {
+        this.ticketToken = ticketToken;
+    }
+
+    public LocalDateTime getCheckedInAt() {
+        return checkedInAt;
+    }
+
+    public void setCheckedInAt(LocalDateTime checkedInAt) {
+        this.checkedInAt = checkedInAt;
     }
 }
