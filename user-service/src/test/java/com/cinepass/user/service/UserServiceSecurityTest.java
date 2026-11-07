@@ -96,6 +96,8 @@ public class UserServiceSecurityTest {
     @Test
     @DisplayName("BCrypt password encoder correctly verifies match and rejects bad password")
     void testBcryptVerification() {
+        String validHash = "$2a$10$qt/wLO5bst2sCQ3W08dgfO1mFvrJ2qTKT/UUHM.91AZ/zUeXKNnF.";
+        assertTrue(passwordEncoder.matches("Password@123", validHash));
         String rawPassword = "SecurePassword@2026";
         String encoded = passwordEncoder.encode(rawPassword);
 
