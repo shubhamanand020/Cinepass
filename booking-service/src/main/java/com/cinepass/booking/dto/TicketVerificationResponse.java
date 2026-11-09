@@ -14,7 +14,7 @@ public record TicketVerificationResponse(
         LocalDateTime showTime,
         List<String> seatNumbers,
         boolean checkedIn,
+        boolean alreadyCheckedIn,
         LocalDateTime checkedInAt,
         String message
 ) {}
-

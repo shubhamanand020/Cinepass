@@ -221,17 +221,18 @@ public class BookingService {
         Booking b = bookingRepository.findByTicketToken(ticketToken)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid or unknown ticket token: " + ticketToken));
 
-        boolean valid = (b.getStatus() == BookingStatus.CONFIRMED);
-        String message;
+        boolean isConfirmed = (b.getStatus() == BookingStatus.CONFIRMED);
         boolean wasAlreadyCheckedIn = (b.getCheckedInAt() != null);
+        boolean valid = isConfirmed && !wasAlreadyCheckedIn;
+        String message;
 
-        if (!valid) {
+        if (!isConfirmed) {
             message = "Invalid admission: Ticket is " + b.getStatus().name();
         } else if (wasAlreadyCheckedIn) {
             message = "Warning: Ticket was already checked in on " + b.getCheckedInAt();
         } else {
             b.setCheckedInAt(LocalDateTime.now());
-            bookingRepository.save(b);
+            b = bookingRepository.save(b);
             message = "Valid ticket. Check-in successful!";
         }
 
@@ -257,6 +258,7 @@ public class BookingService {
                 show != null ? show.showTime() : null,
                 new ArrayList<>(b.getSeatNumbers()),
                 b.getCheckedInAt() != null,
+                wasAlreadyCheckedIn,
                 b.getCheckedInAt(),
                 message
         );
