@@ -52,11 +52,13 @@ public class ShowService {
     public List<SeatResponse> seats(Long showId) {
         Show show = getEntity(showId);
         Screen screen = screenService.getEntity(show.getScreenId());
-        int premiumRows = Math.min(screen.getPremiumRows(), screen.getRows());
-        return java.util.stream.IntStream.range(0, screen.getRows()).boxed()
+        int totalRows = screen.getRows();
+        int premiumRows = Math.max(0, Math.min(screen.getPremiumRows() != null ? screen.getPremiumRows() : 0, totalRows));
+        int premiumStartRow = totalRows - premiumRows;
+        return java.util.stream.IntStream.range(0, totalRows).boxed()
                 .flatMap(row -> java.util.stream.IntStream.rangeClosed(1, screen.getSeatsPerRow()).mapToObj(column -> {
             String rowLabel = String.valueOf((char) ('A' + row));
-            boolean premium = row < premiumRows;
+            boolean premium = premiumRows > 0 && row >= premiumStartRow;
             BigDecimal price = premium ? show.getPremiumPrice() : show.getBasePrice();
             return new SeatResponse(rowLabel + column, rowLabel, column, premium ? "PREMIUM" : "STANDARD", price);
         })).sorted(Comparator.comparing(SeatResponse::row).thenComparing(SeatResponse::column)).toList();
