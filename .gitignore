@@ -47,5 +47,11 @@ reset-and-seed.ps1
 *.bak
 backups/
 
+### Environment & Secrets ###
+.env
+.env.local
+*.env
+
+
 
 

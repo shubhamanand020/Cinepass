@@ -18,6 +18,11 @@ public class HoldSeatsRequest {
     public HoldSeatsRequest() {
     }
 
+    public HoldSeatsRequest(Long showId, List<String> seatNumbers) {
+        this.showId = showId;
+        this.seatNumbers = seatNumbers;
+    }
+
     public Long getShowId() {
         return showId;
     }

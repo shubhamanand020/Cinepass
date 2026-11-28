@@ -17,6 +17,12 @@ public class GlobalExceptionHandler {
         return Map.of("timestamp", Instant.now(), "status", 404, "error", ex.getMessage());
     }
 
+    @ExceptionHandler(SchedulingConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> conflict(SchedulingConflictException ex) {
+        return Map.of("timestamp", Instant.now(), "status", 409, "error", "Conflict", "message", ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> badRequest(Exception ex) {

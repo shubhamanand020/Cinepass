@@ -1,0 +1,159 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: cinepass-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cinepass_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cinepass_secret_2026}
+      POSTGRES_DB: cinepass_user_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-cinepass_admin}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 400M
+
+  eureka-server:
+    build:
+      context: ./eureka_server
+      dockerfile: Dockerfile
+    container_name: cinepass-eureka
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    environment:
+      - PORT=8761
+      - JAVA_OPTS=-Xms128m -Xmx200m -XX:+UseG1GC
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health | grep UP || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 25s
+    deploy:
+      resources:
+        limits:
+          memory: 320M
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: cinepass-user-service
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cinepass_user_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-cinepass_admin}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-cinepass_secret_2026}
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - APP_JWT_SECRET=${APP_JWT_SECRET:-cinepass-review1-jwt-secret-key-2026}
+      - JAVA_OPTS=-Xms128m -Xmx220m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+
+  movie-service:
+    build:
+      context: ./movie-service
+      dockerfile: Dockerfile
+    container_name: cinepass-movie-service
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cinepass_movie_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-cinepass_admin}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-cinepass_secret_2026}
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - APP_JWT_SECRET=${APP_JWT_SECRET:-cinepass-review1-jwt-secret-key-2026}
+      - JAVA_OPTS=-Xms128m -Xmx220m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+
+  show-service:
+    build:
+      context: ./show-service
+      dockerfile: Dockerfile
+    container_name: cinepass-show-service
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cinepass_show_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-cinepass_admin}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-cinepass_secret_2026}
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - APP_JWT_SECRET=${APP_JWT_SECRET:-cinepass-review1-jwt-secret-key-2026}
+      - JAVA_OPTS=-Xms128m -Xmx220m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+
+  booking-service:
+    build:
+      context: ./booking-service
+      dockerfile: Dockerfile
+    container_name: cinepass-booking-service
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cinepass_booking_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-cinepass_admin}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-cinepass_secret_2026}
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - APP_JWT_SECRET=${APP_JWT_SECRET:-cinepass-review1-jwt-secret-key-2026}
+      - JAVA_OPTS=-Xms128m -Xmx220m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: cinepass-api-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - JAVA_OPTS=-Xms128m -Xmx220m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+
+volumes:
+  postgres_data:

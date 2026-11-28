@@ -9,4 +9,6 @@ import com.cinepass.show.entity.Show;
 public interface ShowRepository extends JpaRepository<Show, Long> {
 
     List<Show> findByMovieId(Long movieId);
+
+    List<Show> findByScreenId(Long screenId);
 }
