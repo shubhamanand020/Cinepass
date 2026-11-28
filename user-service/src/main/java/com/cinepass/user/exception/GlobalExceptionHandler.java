@@ -85,10 +85,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(
             Exception exception) {
+        exception.printStackTrace();
 
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "An unexpected error occurred",
+                exception.getClass().getSimpleName() + ": " + exception.getMessage(),
                 LocalDateTime.now()
         );
 
