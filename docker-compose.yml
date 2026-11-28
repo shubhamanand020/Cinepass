@@ -13,7 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-cinepass_admin}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-cinepass_admin} -d cinepass_user_db"]
       interval: 5s
       timeout: 5s
       retries: 5

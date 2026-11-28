@@ -1,7 +1,7 @@
 -- Cinepass Multi-Database Provisioning Script for PostgreSQL
 -- Mounted in /docker-entrypoint-initdb.d/ to auto-initialize on first container start
 
-CREATE DATABASE cinepass_user_db;
+-- cinepass_user_db is created as the default POSTGRES_DB
 CREATE DATABASE cinepass_movie_db;
 CREATE DATABASE cinepass_show_db;
 CREATE DATABASE cinepass_booking_db;
